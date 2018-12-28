@@ -12,8 +12,6 @@ Rules:
 - The first player to run out of cards wins
 - If a player has one card left, they must call uno or else someone else may call uno and make the player with one card left draw two more cards
 
-
-
 #################################################
 Technical Design
 #################################################
@@ -38,7 +36,6 @@ Since the main difficulty with this project is figuring out how the server will 
 Mohammed J. will handle how the client,in this case the player, works
 Mohammed U. will handle how the deck will work in terms of randomizing the deck and how the draw pile will function
 
-
 #################################################
 Timeline
 #################################################
@@ -48,6 +45,3 @@ Have a working server that has the required behavior for this project
 Have a playable game with minimal features(i.e. Without special cards)
 1/14:
 Have a complete and playable game
-
-
-
