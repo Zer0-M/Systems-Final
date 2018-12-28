@@ -5,14 +5,49 @@ Mohammed Jamil, Mohammed Udddin
 #################################################
 Description
 #################################################
+Recreate a version of the popular card game UNO using what we have learned in class.
+Rules:
+- Every player is a dealt a hand of 7 cards
+- Each player views his/her cards(by color or number) during their turn and tries to match the card in the Discard Pile.
+- The first player to run out of cards wins
+- If a player has one card left, they must call uno or else someone else may call uno and make the player with one card left draw two more cards
+
+
 
 #################################################
 Technical Design
 #################################################
+- Networking
+The server will connect to one player at a time and show them the card at the top of the discard pile and switch to the next player after receiving a card from the player.
+
+- Shared Memory
+The top card in the draw pile which will be dealt when a player doesn't have a matching card in hand will remain in a shared memory segment while all the cards are on the server which the players cannot see.
+
+-Signal
+To call “uno” a player must press a key. The keypress will send a signal to the server that checks if a player has one card left. If the player that called uno (sent the signal) is the player with only one card, they are “safe” for the turn. Otherwise, the player with only one card must draw two more. 
+
+- Memory Allocation
+The players hand is stored in a dynamic array as the number of cards will keep changing in the players hand
+
+- Data Structures and Algorithms
+The server will likely store the card deck as a stack
+It might be helpful to use a dequeue to manage the order of turns.
+
+-Responsibilities
+Since the main difficulty with this project is figuring out how the server will work, we will both work on that cooperatively
+Mohammed J. will handle how the client,in this case the player, works
+Mohammed U. will handle how the deck will work in terms of randomizing the deck and how the draw pile will function
+
 
 #################################################
 Timeline
 #################################################
+1/7:
+Have a working server that has the required behavior for this project
+1/10:
+Have a playable game with minimal features(i.e. Without special cards)
+1/14:
+Have a complete and playable game
 
 
 
