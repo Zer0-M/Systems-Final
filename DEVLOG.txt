@@ -1,0 +1,6 @@
+Mohammed Jamil -- 2018-01-02 11:00
+--------------------------------------------------------------
+Started working on the project
+Initialized headers and imported old server code
+working on card structs
+==============================================================
