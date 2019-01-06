@@ -10,7 +10,7 @@
 
   returns the file descriptor for the upstream pipe.
   =========================*/
-int server_handshake(int *to_client) {
+int server_handshake(int *to_client,int playernum) {
   int s2cp=mkfifo("/tmp/s2c",0644);
   if(s2cp==-1){
     printf("%s \n",strerror(errno));
@@ -24,17 +24,21 @@ int server_handshake(int *to_client) {
   read(upstream,buff,HANDSHAKE_BUFFER_SIZE);
   char * wrfile=buff;
   printf("Name of Client's Private Pipe Received: %s\n",wrfile);
-  *to_client=open(wrfile,O_WRONLY);
+  to_client[playernum]=open(wrfile,O_WRONLY);
   remove("/tmp/s2c");
   printf("Removed WKP\n");
-  if(*to_client==-1){
+  if(to_client[playernum]==-1){
     printf("%s \n",strerror(errno));
   }
-  write(*to_client,ACK,HANDSHAKE_BUFFER_SIZE);
+  write(to_client[playernum],ACK,HANDSHAKE_BUFFER_SIZE);
   char response[HANDSHAKE_BUFFER_SIZE];
   read(upstream,response,HANDSHAKE_BUFFER_SIZE);
   printf("Response received from client: %s\n",response);
   printf("Handshake Complete\n");
+  s2cp=mkfifo("/tmp/s2c",0644);
+  if(s2cp==-1){
+    printf("%s \n",strerror(errno));
+  }
   return upstream;
 }
 

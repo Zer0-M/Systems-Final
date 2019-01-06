@@ -45,16 +45,26 @@ int main() {
   struct card deck[108];
   createDeck(deck);
   //signal(SIGINT,sighandler);
-  int to_client;
-  int from_client;
+  int to_client[2];
+  int from_client[2];
+  int i=0;
   while(1){
-    from_client = server_handshake( &to_client );
+    while(i<2){
+      from_client[i] = server_handshake( to_client,i );
+      i++;
+    }
+    i=0;
     char * data=calloc(BUFFER_SIZE,sizeof(char));
-    while(read(from_client,data,BUFFER_SIZE)){
+    while(read(from_client[i],data,BUFFER_SIZE)){
       printf("The player played %s",data);
+      fflush(stdout);
       char * response=data;
-      write(to_client,response,strlen(response));
-      free(data);
+      write(to_client[i],response,strlen(response));
+      free(data);    
+      i++;
+      if(i==2){
+        i=0;
+      }
     }
   }
 }
