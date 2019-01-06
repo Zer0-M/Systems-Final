@@ -1,3 +1,9 @@
+Mohammed Jamil -- 2018-01-06 02:00
+--------------------------------------------------------------
+Deck Creation works
+Next step is to modify the servers structure
+==============================================================
+
 Mohammed Jamil -- 2018-01-02 11:00
 --------------------------------------------------------------
 Started working on the project

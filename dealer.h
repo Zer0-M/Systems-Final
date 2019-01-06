@@ -12,6 +12,11 @@
 #include <signal.h>
 
 struct card {
-    char color[15];
-    int number;
-}
+    char* color;
+    int action;
+    union cardname{
+        int number;
+        char* name;
+    } face;
+};
+void createDeck(struct card* deck);
