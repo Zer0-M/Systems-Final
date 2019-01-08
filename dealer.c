@@ -40,7 +40,6 @@ void createDeck(struct card * deck){
 }
 
 
-
 int main() {
   struct card deck[108];
   createDeck(deck);

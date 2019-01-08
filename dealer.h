@@ -19,4 +19,6 @@ struct card {
         char* name;
     } face;
 };
+
+
 void createDeck(struct card* deck);
