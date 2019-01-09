@@ -30,7 +30,9 @@ int server_handshake(int *to_client,int playernum) {
   if(to_client[playernum]==-1){
     printf("%s \n",strerror(errno));
   }
-  write(to_client[playernum],ACK,HANDSHAKE_BUFFER_SIZE);
+  char * designation=malloc(sizeof(char)*100);
+  sprintf(designation,"You are player %d\n",playernum+1);
+  write(to_client[playernum],designation,strlen(designation));
   char response[HANDSHAKE_BUFFER_SIZE];
   read(upstream,response,HANDSHAKE_BUFFER_SIZE);
   printf("Response received from client: %s\n",response);
@@ -71,7 +73,7 @@ int client_handshake(int *to_server) {
     printf("%s \n",strerror(errno));
   }
   char * buff=malloc(sizeof(char));
-  read(downstream,buff,HANDSHAKE_BUFFER_SIZE);
+  read(downstream,buff,30);
   printf("Message Received From Server:%s\n",buff);
   remove(privatepipe);
   printf("Private FIFO removed\n");

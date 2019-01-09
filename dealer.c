@@ -50,17 +50,23 @@ int main() {
   int i=0;
   while(1){
     while(i<2){
+      printf("Waiting For at least two players\n");
       from_client[i] = server_handshake( to_client,i );
       i++;
     }
     i=0;
     char * data=calloc(BUFFER_SIZE,sizeof(char));
     while(read(from_client[i],data,BUFFER_SIZE)){
-      printf("The player played %s",data);
+      printf("Player %d's Turn\n",i);
+      printf("The player played %s\n",data);
       fflush(stdout);
-      char * response=data;
+      char * response=calloc(BUFFER_SIZE,sizeof(char));
+      strcpy(response,data);
       write(to_client[i],response,strlen(response));
-      free(data);    
+      free(response);
+      free(data);
+      response=calloc(BUFFER_SIZE,sizeof(char));
+      data=calloc(BUFFER_SIZE,sizeof(char));
       i++;
       if(i==2){
         i=0;
