@@ -10,15 +10,15 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
+#include "card.h"
 
 struct card {
-    char* color;
+    char * color;
     int action;
-    union cardname{
-        int number;
-        char* name;
-    } face;
+    char * name;
 };
 
 
 void createDeck(struct card* deck);
+
+void createNodeDeck(struct node first);
