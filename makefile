@@ -4,12 +4,12 @@ player: player.o pipe_networking.o
 	gcc -o player player.o pipe_networking.o
 
 dealer: dealer.o pipe_networking.o
-	gcc -o dealer dealer.o pipe_networking.o card.o
+	gcc -o dealer dealer.o pipe_networking.o
 
 player.o: player.c pipe_networking.h
 	gcc -c player.c
 
-dealer.o: dealer.c pipe_networking.h card.h dealer.h
+dealer.o: dealer.c pipe_networking.h dealer.h
 	gcc -c -g dealer.c
 
 pipe_networking.o: pipe_networking.c pipe_networking.h

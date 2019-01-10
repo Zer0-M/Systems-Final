@@ -4,9 +4,8 @@
 
 
 struct node{
-	node prev;
-	node next;
+	struct node prev;
+	struct node next;
 	struct card card;
 }
 
-struct node addNext(struct node this, struct card card);

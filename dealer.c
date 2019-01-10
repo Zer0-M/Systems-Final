@@ -1,7 +1,7 @@
 #include "pipe_networking.h"
 #include "dealer.h"
-#include "card.h"
 
+/*
 void createDeck(struct card * deck){
     char colors[4][20] = {"red","green","blue","yellow"};
     int cardnum=0;
@@ -40,76 +40,77 @@ void createDeck(struct card * deck){
         cardnum++;
     }
 }
-
-void createNodeDeck(struct node first){
-	struct node curr = first;
+*/
+void createNodeDeck(struct node * first){
+	struct node * curr = first;
 	char colors[4][20] = {"red","green","blue","yellow"};
-	char names[9][5] = {"0","1","2","3","4","5","6","7","8","9"};
+	char names[9][5] = {"1","2","3","4","5","6","7","8","9"};
     int cardnum=0;
+    struct node * temp;
     for(int i=0;i<4;i++){
-        for(int j=0;j<10;j++){
+        for(int j=0;j<9;j++){
 		    for(int num=0;(j>=1||num<1)&&num<2;num++){
-				struct node temp;
-				temp.prev = curr;
-				temp.next = NULL;
-				curr.next = temp;
-            	temp.card.color=colors[i];
-            	temp.card.name=names[j];
-            	temp.card.action=0;
+				temp = calloc(sizeof(struct node),1);
+				temp->prev = curr;
+				temp->next = NULL;
+				curr->next = temp;
+            	temp->card.color=colors[i];
+            	temp->card.name=names[j];
+            	temp->card.action=0;
 				curr = temp;
           		cardnum++;
             }
         }
         for(int j=0;j<2;j++){
-        	struct node temp;
-			temp.prev = curr;
-			temp.next = NULL;
-			curr.next = temp;
-			temp.card.color=colors[i];
-        	temp.name="Reverse";
-          	temp.action=1;
+        	temp = calloc(sizeof(struct node),1);
+			temp->prev = curr;
+			temp->next = NULL;
+			curr->next = temp;
+			temp->card.color=colors[i];
+        	temp->card.name="Reverse";
+          	temp->card.action=1;
           	curr = temp;
 			cardnum++;
           	
-			struct node temp;
-			temp.prev = curr;
-			temp.next = NULL;
-			curr.next = temp;
-			temp.card.color=colors[i];
-          	temp.card.name="DrawTwo";
-          	temp.card.action=1;
+			temp = calloc(sizeof(struct node),1);
+			temp->prev = curr;
+			temp->next = NULL;
+			curr->next = temp;
+			temp->card.color=colors[i];
+          	temp->card.name="DrawTwo";
+          	temp->card.action=1;
 			curr = temp;
           	cardnum++;
 
-			struct node temp;
-			temp.prev = curr;
-			temp.next = NULL;
-			curr.next = temp;
-          	temp.card.color=colors[i];
-          	temp.card.action=1;
-          	temp.card.name="Skip";
+			temp = calloc(sizeof(struct node),1);
+			temp->prev = curr;
+			temp->next = NULL;
+			curr->next = temp;
+          	temp->card.color=colors[i];
+          	temp->card.action=1;
+          	temp->card.name="Skip";
 			curr = temp;
           	cardnum++;
         }
     }
     for(int i=0;i<4;i++){
-		struct node temp;
-		temp.prev = curr;
-		temp.next = NULL;
-		curr.next = temp;
-        temp.card.color="";
-        temp.card.name="Wild";
-        temp.card.action=1;
+		temp = calloc(sizeof(struct node),1);
+		temp->prev = curr;
+		temp->next = NULL;
+		curr->next = temp;
+        temp->card.color="";
+        temp->card.name="Wild";
+        temp->card.action=1;
 		curr = temp;
         cardnum++;
 
-		struct node temp;
-		temp.prev = curr;
-		temp.next = NULL;
-		curr.next = temp;
-        temp.card.color="";
-        temp.card.name="Wild 4";
-        temp.card..action=1;
+		temp = calloc(sizeof(struct node),1);
+		temp->prev = curr;
+		temp->next = NULL;
+		curr->next = temp;
+        temp->card.color="";
+        temp->card.name="Wild 4";
+        temp->card.action=1;
 		curr = temp;
         cardnum++;
     }
@@ -149,12 +150,12 @@ int main() {
 */
 
 int main(){
-	struct node first;
-	struct node curr;
+	struct node * first = calloc(sizeof(struct node),1);
+	struct node * curr;
 	createNodeDeck(first);
-	curr = first.next;
-	while (curr.next){
-		printf("%s",curr.card.name);
-		curr = curr.next;
+	curr = first->next;
+	while (curr->next){
+		printf("%s %s\n",curr->card.color,curr->card.name);
+		curr = curr->next;
 	}
 }
