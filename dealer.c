@@ -57,6 +57,7 @@ void createNodeDeck(struct node * first){
             	temp->card.color=colors[i];
             	temp->card.name=names[j];
             	temp->card.action=0;
+				printf("printing %s %s, %s %s, %d\n", temp->card.color, colors[i], temp->card.name, names[j], temp->card.action);
 				curr = temp;
           		cardnum++;
             }
