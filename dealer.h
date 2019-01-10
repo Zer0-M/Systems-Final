@@ -13,16 +13,18 @@
 
 struct card {
     char * color;
-    int action;
     char * name;
+	int action;
 };
 
 struct node {
 	struct node * prev;
 	struct node * next;
-	struct card card;
+	struct card * card;
 };
 
 //void createDeck(struct card* deck);
+
+struct card * makeCard(char * color, char * name, int action);
 
 void createNodeDeck(struct node * first);
