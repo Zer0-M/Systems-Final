@@ -44,7 +44,7 @@ void createDeck(struct card * deck){
 
 struct card * makeCard(char * color, char * name, int action){
 	struct card * temp = calloc(sizeof(struct card),1);
-	temp->color=color;;
+	temp->color=color;
 	temp->name=name;
 	temp->action=action;
 	return temp;
@@ -63,10 +63,10 @@ struct node * createNodeDeck(){
 	struct node * first = calloc(sizeof(struct node),1);
 	first->prev = NULL;
 	first->next = NULL;
-	first->card = NULL;
+	first->card = makeCard("white","test",0);
 	struct node * curr = first;
 	char colors[4][20] = {"red","green","blue","yellow"};
-	char names[10][5] = {"0","1","2","3","4","5","6","7","8","9"};
+	char names[10][5] = {"zero","one","two","3","4","5","6","7","8","9"};
     int cardnum=0;
     struct node * temp;
     for(int i=0;i<4;i++){
@@ -145,7 +145,7 @@ struct node * createNodeDeck(){
 		curr = temp;
         cardnum++;
     }
-	return first->next;
+	return first;
 }
 
 
