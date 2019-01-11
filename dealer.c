@@ -50,8 +50,20 @@ struct card * makeCard(char * color, char * name, int action){
 	return temp;
 }
 
+struct node * makeNode(struct node * prev, struct node * next, struct card * card){
+	struct node * temp = calloc(sizeof(struct node),1);
+	temp->prev = prev;
+	temp->next = next;
+	prev->next = temp;
+	temp->card = card;
+	return temp;
+}
 
-void createNodeDeck(struct node * first){
+struct node * createNodeDeck(){
+	struct node * first = calloc(sizeof(struct node),1);
+	first->prev = NULL;
+	first->next = NULL;
+	first->card = NULL;
 	struct node * curr = first;
 	char colors[4][20] = {"red","green","blue","yellow"};
 	char names[10][5] = {"0","1","2","3","4","5","6","7","8","9"};
@@ -60,15 +72,16 @@ void createNodeDeck(struct node * first){
     for(int i=0;i<4;i++){
         for(int j=0;j<10;j++){
 		    for(int num=0;(j>=1||num<1)&&num<2;num++){
-				temp = calloc(sizeof(struct node),1);
+				temp = makeNode(curr, NULL, makeCard(colors[i],names[j],0));
+			/*	temp = calloc(sizeof(struct node),1);
 				temp->prev = curr;
 				temp->next = NULL;
 				curr->next = temp;
-            /*	temp->card.color=colors[i];
+           *	temp->card.color=colors[i];
             	temp->card.name=names[j];
-            	temp->card.action=0;*/
+            	temp->card.action=0;*
 				temp->card = makeCard(colors[i], names[j], 0);
-				printf("printing %s %s, %s %s, %d\n", temp->card->color, colors[i], temp->card->name, names[j], temp->card->action);
+			*/	printf("printing %s %s, %s %s, %d\n", temp->card->color, colors[i], temp->card->name, names[j], temp->card->action);
 				curr = temp;
           		cardnum++;
 				printf("%s, %s\n",temp->card->color, temp->card->name);
@@ -132,8 +145,7 @@ void createNodeDeck(struct node * first){
 		curr = temp;
         cardnum++;
     }
-
-
+	return first->next;
 }
 
 
@@ -168,13 +180,12 @@ int main() {
 */
 
 int main(){
-	struct node * first = calloc(sizeof(struct node),1);
-	struct node * curr;
-	createNodeDeck(first);
-	curr = first;
+//	struct node * first = calloc(sizeof(struct node),1);
+//	struct node * curr;
+	struct node * curr = createNodeDeck();
 	while (curr->next){
-		curr = curr->next;
-		printf("%s %s\n",curr->card->color,curr->card->name);
 	//	curr = curr->next;
+		printf("%s %s\n",curr->card->color,curr->card->name);
+		curr = curr->next;
 	}
 }

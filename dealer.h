@@ -27,4 +27,8 @@ struct node {
 
 struct card * makeCard(char * color, char * name, int action);
 
-void createNodeDeck(struct node * first);
+struct node * makeNode(struct node * prev, struct node * next, struct card * card);
+
+//void createNodeDeck(struct node * first);
+
+struct node * createNodeDeck();
