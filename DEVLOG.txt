@@ -1,3 +1,9 @@
+Mohammed Uddin -- 2018-01-11 12:20
+--------------------------------------------------------------
+The deck is now a linked list with the cards being stored on nodes
+Next step will be making hands linked lists and passing nodes between deck and hands
+==============================================================
+
 Mohammed Uddin -- 2018-01-09 11:00
 --------------------------------------------------------------
 Worked on creating deck as a linked list
