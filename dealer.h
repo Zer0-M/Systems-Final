@@ -12,8 +12,8 @@
 #include <signal.h>
 
 struct card {
-    char * color;
-    char * name;
+    char color[20];
+    char name[5];
 	int action;
 };
 

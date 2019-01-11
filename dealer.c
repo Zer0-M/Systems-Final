@@ -44,8 +44,8 @@ void createDeck(struct card * deck){
 
 struct card * makeCard(char * color, char * name, int action){
 	struct card * temp = calloc(sizeof(struct card),1);
-	temp->color=color;
-	temp->name=name;
+	strcpy(temp->color,color);
+	strcpy(temp->name,name);
 	temp->action=action;
 	return temp;
 }
@@ -66,7 +66,7 @@ struct node * createNodeDeck(){
 	first->card = makeCard("white","test",0);
 	struct node * curr = first;
 	char colors[4][20] = {"red","green","blue","yellow"};
-	char names[10][5] = {"zero","one","two","3","4","5","6","7","8","9"};
+	char names[10][5] = {"0","1","2","3","4","5","6","7","8","9"};
     int cardnum=0;
     struct node * temp;
     for(int i=0;i<4;i++){
@@ -81,10 +81,10 @@ struct node * createNodeDeck(){
             	temp->card.name=names[j];
             	temp->card.action=0;*
 				temp->card = makeCard(colors[i], names[j], 0);
-			*/	printf("printing %s %s, %s %s, %d\n", temp->card->color, colors[i], temp->card->name, names[j], temp->card->action);
+			*///	printf("printing %s %s, %s %s, %d\n", temp->card->color, colors[i], temp->card->name, names[j], temp->card->action);
 				curr = temp;
           		cardnum++;
-				printf("%s, %s\n",temp->card->color, temp->card->name);
+			//	printf("%s, %s\n",temp->card->color, temp->card->name);
             }
         }
         for(int j=0;j<2;j++){
@@ -182,7 +182,8 @@ int main() {
 int main(){
 //	struct node * first = calloc(sizeof(struct node),1);
 //	struct node * curr;
-	struct node * curr = createNodeDeck();
+	struct node * first = createNodeDeck();
+	struct node * curr = first->next;
 	while (curr->next){
 	//	curr = curr->next;
 		printf("%s %s\n",curr->card->color,curr->card->name);
