@@ -10,6 +10,11 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
+#define RED  "\x1B[31m"
+#define GRN  "\x1B[32m"
+#define YEL  "\x1B[33m"
+#define BLU  "\x1B[34m"
+#define WHT  "\x1B[37m"
 
 struct card {
     char color[20];

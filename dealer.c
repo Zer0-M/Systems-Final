@@ -169,11 +169,27 @@ struct node * createHand(struct node * first){
 char * handToString(struct node * hand){
 	struct node * temp=hand;
 	char * handstr=malloc(1000);
+	char * color;
 	while(temp){
-		strcat(handstr,temp->card->color);
-		strcat(handstr," ");
+		if(!strcmp(temp->card->color,"red")){
+			color=RED;
+		}
+		else if(!strcmp(temp->card->color,"green")){
+			color=GRN;
+		}
+		else if(!strcmp(temp->card->color,"yellow")){
+			color=YEL;
+		}
+		else if(!strcmp(temp->card->color,"blue")){
+			color=BLU;
+		}
+		else{
+			color=WHT;
+		}
+		strcat(handstr,color);
+		strcat(handstr,"#######\n#     #\n#  ");
 		strcat(handstr,temp->card->name);
-		strcat(handstr," ");
+		strcat(handstr,"  #\n#     #\n#######\n");
 		temp=temp->next;
 	}
 	return handstr;
@@ -182,10 +198,10 @@ char * handToString(struct node * hand){
 int main() {
   struct node * deck = createNodeDeck();
 	struct node ** hands=calloc(sizeof(struct node *),2);
-	for(int i=0;i<3;i++){
+	for(int i=0;i<4;i++){
 		hands[i]=createHand(deck);
 	}	
-	printf("%s\n",handToString(hands[0]));
+	printf("%s\n",handToString(hands[3]));
   //signal(SIGINT,sighandler);
   int to_client[2];
   int from_client[2];
