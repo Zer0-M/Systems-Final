@@ -18,7 +18,7 @@
 #define HANDSHAKE_BUFFER_SIZE 10
 #define BUFFER_SIZE 1000
 
-int server_handshake(int *to_client,int playernum);
+int server_handshake(int *to_client,int playernum, char * hand);
 
 int client_handshake(int *to_server);
 

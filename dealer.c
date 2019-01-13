@@ -147,19 +147,52 @@ struct node * createNodeDeck(){
     }
 	return first;
 }
+struct node * createHand(struct node * first){
+	struct node * curr;
+	if(strcmp(first->card->color,"white")){
+		curr = first->next;
+	}
+	else{
+		curr =first;
+	}
+	for(int i=0;i<7;i++){
+		curr=curr->next;
+	}
+	struct node * temp= malloc(sizeof(struct node *));
+	temp->card=makeCard(curr->card->color,curr->card->name,0);
+	temp->next=curr->next;
+	curr->next=NULL;
+	curr=first->next;
+	*first=*temp;
+	return curr;
+}
+char * handToString(struct node * hand){
+	struct node * temp=hand;
+	char * handstr=malloc(1000);
+	while(temp){
+		strcat(handstr,temp->card->color);
+		strcat(handstr," ");
+		strcat(handstr,temp->card->name);
+		strcat(handstr," ");
+		temp=temp->next;
+	}
+	return handstr;
+}
 
-
-/*
 int main() {
-  struct card deck[108];
-  createDeck(deck);
+  struct node * deck = createNodeDeck();
+	struct node ** hands=calloc(sizeof(struct node *),2);
+	for(int i=0;i<3;i++){
+		hands[i]=createHand(deck);
+	}	
+	printf("%s\n",handToString(hands[0]));
   //signal(SIGINT,sighandler);
   int to_client[2];
   int from_client[2];
   int i=0;
   while(1){
     while(i<2){
-      from_client[i] = server_handshake( to_client,i );
+      from_client[i] = server_handshake( to_client,i, handToString(hands[i]));
       i++;
     }
     i=0;
@@ -177,9 +210,9 @@ int main() {
     }
   }
 }
-*/
 
-int main(){
+
+/*int main(){
 //	struct node * first = calloc(sizeof(struct node),1);
 //	struct node * curr;
 	struct node * first = createNodeDeck();
@@ -189,4 +222,4 @@ int main(){
 		printf("%s %s\n",curr->card->color,curr->card->name);
 		curr = curr->next;
 	}
-}
+}*/

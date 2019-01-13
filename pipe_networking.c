@@ -10,12 +10,12 @@
 
   returns the file descriptor for the upstream pipe.
   =========================*/
-int server_handshake(int *to_client,int playernum) {
+int server_handshake(int *to_client,int playernum, char * hand) {
   int s2cp=mkfifo("/tmp/s2c",0644);
   if(s2cp==-1){
     printf("%s \n",strerror(errno));
   }
-  printf("Well-Known FIFO s2c created\n");
+  //printf("Well-Known FIFO s2c created\n");
   int upstream=open("/tmp/s2c",O_RDONLY);
   if(upstream==-1){
     printf("%s \n",strerror(errno));
@@ -23,17 +23,18 @@ int server_handshake(int *to_client,int playernum) {
   char buff[HANDSHAKE_BUFFER_SIZE];
   read(upstream,buff,HANDSHAKE_BUFFER_SIZE);
   char * wrfile=buff;
-  printf("Name of Client's Private Pipe Received: %s\n",wrfile);
+  //printf("Name of Client's Private Pipe Received: %s\n",wrfile);
   to_client[playernum]=open(wrfile,O_WRONLY);
   remove("/tmp/s2c");
-  printf("Removed WKP\n");
+  //printf("Removed WKP\n");
   if(to_client[playernum]==-1){
     printf("%s \n",strerror(errno));
   }
-  write(to_client[playernum],ACK,HANDSHAKE_BUFFER_SIZE);
+  printf("%s\n",hand);
+  write(to_client[playernum],hand,strlen(hand));
   char response[HANDSHAKE_BUFFER_SIZE];
   read(upstream,response,HANDSHAKE_BUFFER_SIZE);
-  printf("Response received from client: %s\n",response);
+  //printf("Response received from client: %s\n",response);
   printf("Handshake Complete\n");
   s2cp=mkfifo("/tmp/s2c",0644);
   if(s2cp==-1){
@@ -65,18 +66,18 @@ int client_handshake(int *to_server) {
     printf("%s \n",strerror(errno));
   }
   write(*to_server,privatepipe,HANDSHAKE_BUFFER_SIZE);
-  printf("Sent FIFO name: %s\n",privatepipe);
+  //printf("Sent FIFO name: %s\n",privatepipe);
   int downstream=open(privatepipe,O_RDONLY);
   if(downstream==-1){
     printf("%s \n",strerror(errno));
   }
-  char * buff=malloc(sizeof(char));
-  read(downstream,buff,HANDSHAKE_BUFFER_SIZE);
-  printf("Message Received From Server:%s\n",buff);
+  char * buff=calloc(sizeof(char),1000);
+  read(downstream,buff,1000);
+  printf("Cards in your hand:%s\n",buff);
   remove(privatepipe);
-  printf("Private FIFO removed\n");
+  //printf("Private FIFO removed\n");
   write(*to_server,ACK,HANDSHAKE_BUFFER_SIZE);
-  printf("Response sent to server\n");
+  //printf("Response sent to server\n");
   printf("Handshake complete\n");
   return downstream;
 }
