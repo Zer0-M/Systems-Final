@@ -10,6 +10,7 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
+#include <time.h>
 #define RED  "\x1B[31m"
 #define GRN  "\x1B[32m"
 #define YEL  "\x1B[33m"
@@ -33,6 +34,8 @@ struct node {
 struct card * makeCard(char * color, char * name, int action);
 
 struct node * makeNode(struct node * prev, struct node * next, struct card * card);
+
+struct node * shuffle(struct node * first);
 
 //void createNodeDeck(struct node * first);
 

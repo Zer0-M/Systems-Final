@@ -59,6 +59,33 @@ struct node * makeNode(struct node * prev, struct node * next, struct card * car
 	return temp;
 }
 
+struct node * shuffle(struct node * first){ //first should be white test card
+	int cards = 108;
+	srand(time(NULL));
+	int index = 0;
+	struct node * curr = first->next; //tracks current card in deck
+	struct node * new = calloc(sizeof(struct node),1);
+	new->prev = NULL;
+	new->next = NULL;
+	new->card = makeCard("white","test",0); //new shuffled deck
+	curr->prev = NULL;
+	first->next = curr->next; 
+	struct node * end = new; //tracks current end of new shuffled deck
+	for (int i = 107; i > 0; --i){
+		index = rand() % i;
+		for (int j = 0; j < index; ++j){ //navigate to index
+			curr = curr->next;
+		} 
+		struct node * temp = curr->next;
+		curr->prev->next = temp; 
+		curr->next->prev = curr->prev; //detaches current
+		end->next = curr;
+		curr->prev = end; //attaches current to end of shuffled deck
+		curr = first->next;
+	}
+	return new;
+}
+
 struct node * createNodeDeck(){
 	struct node * first = calloc(sizeof(struct node),1);
 	first->prev = NULL;
@@ -202,6 +229,7 @@ char * handToString(struct node * hand){
 
 int main() {
   struct node * deck = createNodeDeck();
+  struct node * shuffled = shuffle(deck);
 	struct node ** hands=calloc(sizeof(struct node *),2);
 	for(int i=0;i<13;i++){
 		hands[i]=createHand(deck);
