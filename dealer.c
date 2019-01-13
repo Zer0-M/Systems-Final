@@ -95,7 +95,7 @@ struct node * createNodeDeck(){
 		/*	temp->card.color=colors[i];
         	temp->card.name="Reverse";
           	temp->card.action=1;*/
-			temp->card = makeCard(colors[i], "Reverse", 1);
+			temp->card = makeCard(colors[i], "R", 1);
           	curr = temp;
 			cardnum++;
           	
@@ -106,7 +106,7 @@ struct node * createNodeDeck(){
 		/*	temp->card.color=colors[i];
           	temp->card.name="DrawTwo";
           	temp->card.action=1;*/
-			temp->card = makeCard(colors[i], "DrawTwo", 1);
+			temp->card = makeCard(colors[i], "+2", 1);
 			curr = temp;
           	cardnum++;
 
@@ -117,7 +117,7 @@ struct node * createNodeDeck(){
 		/*	temp->card.color=colors[i];
           	temp->card.action=1;
           	temp->card.name="Skip";*/
-			temp->card = makeCard(colors[i], "Skip", 1);
+			temp->card = makeCard(colors[i], "X", 1);
 			curr = temp;
           	cardnum++;
         }
@@ -130,7 +130,7 @@ struct node * createNodeDeck(){
 	/*	temp->card.color="";
         temp->card.name="Wild";
         temp->card.action=1;*/
-		temp->card = makeCard("", "Wild", 1);
+		temp->card = makeCard("", "W", 1);
 		curr = temp;
         cardnum++;
 
@@ -141,7 +141,7 @@ struct node * createNodeDeck(){
 	/*	temp->card.color="";
         temp->card.name="Wild 4";
         temp->card.action=1;*/
-		temp->card = makeCard("", "Wild 4", 1);
+		temp->card = makeCard("", "W4", 1);
 		curr = temp;
         cardnum++;
     }
@@ -171,6 +171,13 @@ char * handToString(struct node * hand){
 	char * handstr=malloc(1000);
 	char * color;
 	while(temp){
+		char * cardface=malloc(1000);
+		if(strlen(temp->card->name)>1){
+			sprintf(cardface,"########\n#      #\n#  %s  #\n#      #\n########\n",temp->card->name);
+		}
+		else{
+			sprintf(cardface,"########\n#      #\n#   %s  #\n#      #\n########\n",temp->card->name);
+		}
 		if(!strcmp(temp->card->color,"red")){
 			color=RED;
 		}
@@ -187,9 +194,7 @@ char * handToString(struct node * hand){
 			color=WHT;
 		}
 		strcat(handstr,color);
-		strcat(handstr,"#######\n#     #\n#  ");
-		strcat(handstr,temp->card->name);
-		strcat(handstr,"  #\n#     #\n#######\n");
+		strcat(handstr,cardface);
 		temp=temp->next;
 	}
 	return handstr;
@@ -198,10 +203,10 @@ char * handToString(struct node * hand){
 int main() {
   struct node * deck = createNodeDeck();
 	struct node ** hands=calloc(sizeof(struct node *),2);
-	for(int i=0;i<4;i++){
+	for(int i=0;i<13;i++){
 		hands[i]=createHand(deck);
 	}	
-	printf("%s\n",handToString(hands[3]));
+	printf("%s\n",handToString(hands[12]));
   //signal(SIGINT,sighandler);
   int to_client[2];
   int from_client[2];
