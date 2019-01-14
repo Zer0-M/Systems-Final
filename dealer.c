@@ -64,12 +64,13 @@ struct node * shuffle(struct node * first){ //first should be white test card
 	srand(time(NULL));
 	int index = 0;
 	struct node * curr = first->next; //tracks current card in deck
-	struct node * new = calloc(sizeof(struct node),1);
+/*	struct node * new = calloc(sizeof(struct node),1);
 	new->prev = NULL;
 	new->next = NULL;
 	new->card = makeCard("white","test",0); //new shuffled deck
+*/	first->next = NULL; //back to detaching 
 	curr->prev = NULL;
-	first->next = curr->next; 
+//	first->next = curr->next; 
 	struct node * end = new; //tracks current end of new shuffled deck
 	for (int i = 107; i > 0; --i){
 		index = rand() % i;
