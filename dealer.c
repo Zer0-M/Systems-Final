@@ -58,9 +58,69 @@ struct node * makeNode(struct node * prev, struct node * next, struct card * car
 	temp->card = card;
 	return temp;
 }
+int length(struct node * first){
+	int count=0;
+	struct node * temp=first->next;
+	while(temp){
+		count++;
+		temp=temp->next;
+	} 
+	return count;
+}
+int indexOf(struct node * deck,char * card){
+	int index=0;
+	while(deck->next){
+		if(!cardcmp(deck,card)){
+			return index;
+		}
+		index++;
+		deck=deck->next;
+	}
+	return -1;
+}
+struct node * play(struct node * deck,int index, struct node * pile){
+	struct node * first;
+	if(index==0){
+		first=deck->next;
+		deck=NULL;
+	}
+	else{
+		first=deck;
+		int i=0;
+		for(;i<index-1;i++){
+			deck=deck->next;
+		}	
+		struct node * temp= malloc(sizeof(struct node *));
+		temp->card=makeCard(deck->next->card->color,deck->next->card->name,0);
+		pile=temp;
+		deck->next=deck->next->next;
+	}
+	return first;
 
+}
+int cardcmp(struct node * card, char * info ){
+	char * color=calloc(sizeof(char),10);
+	char * number=calloc(sizeof(char),2);
+	char * str=calloc(sizeof(char),20);
+	strcpy(str,info);
+    char *token = strtok(str, " ");
+	int i=0;
+    while (token != NULL) 
+    { 		
+		if(i ==0){
+			color=token;
+		}
+		if(i==1){
+			number=token;
+		}
+        token = strtok(NULL, " "); 
+		i++;
+    }
+	return strcmp(card->card->color,color) * strcmp(card->card->name,number);
+}
+/*
 struct node * shuffle(struct node * first){ //first should be white test card
-	int cards = 108;
+	int cards = length(first);
 	srand(time(NULL));
 	int index = 0;
 	struct node * curr = first->next; //tracks current card in deck
@@ -77,14 +137,14 @@ struct node * shuffle(struct node * first){ //first should be white test card
 			curr = curr->next;
 		} 
 		struct node * temp = curr->next;
-		curr->prev->next = temp; 
+		curr->prev->next = *temp; 
 		curr->next->prev = curr->prev; //detaches current
-		end->next = curr;
-		curr->prev = end; //attaches current to end of shuffled deck
+		end->next = *curr;
+		curr->prev = *end; //attaches current to end of shuffled deck
 		curr = first->next;
 	}
 	return new;
-}
+}*/
 
 struct node * createNodeDeck(){
 	struct node * first = calloc(sizeof(struct node),1);
@@ -193,6 +253,27 @@ struct node * createHand(struct node * first){
 	*first=*temp;
 	return curr;
 }
+void draw(struct node * first, struct node * hand){
+		struct node * curr;
+	if(strcmp(first->card->color,"white")){
+		curr = first->next;
+	}
+	else{
+		curr =first;
+	}
+	struct node * temp= malloc(sizeof(struct node *));
+	temp->card=makeCard(curr->card->color,curr->card->name,0);
+	temp->next=curr->next;
+	curr->next=NULL;
+	curr=first->next;
+	*first=*temp;
+	struct node * end= hand;
+	while(end->next){
+		end=end->next;
+	}
+	end->next=curr;
+	curr->prev=end;
+}
 char * handToString(struct node * hand){
 	struct node * temp=hand;
 	char * handstr=malloc(1000);
@@ -229,33 +310,51 @@ char * handToString(struct node * hand){
 
 int main() {
   struct node * deck = createNodeDeck();
-  struct node * shuffled = shuffle(deck);
+  struct node * pile=malloc(sizeof(struct node));
+  *pile=*deck->next;
+  deck=deck->next;
+  pile->next=NULL;
 	struct node ** hands=calloc(sizeof(struct node *),2);
 	for(int i=0;i<13;i++){
 		hands[i]=createHand(deck);
-	}	
-	printf("%s\n",handToString(hands[12]));
+	}
+  printf("%d\n",cardcmp(hands[0],"blue 1"));	
   //signal(SIGINT,sighandler);
   int to_client[2];
   int from_client[2];
   int i=0;
   while(1){
+	char * response=calloc(sizeof(char),1000);
+	sprintf(response,"\nDiscard Pile:\n%s\n",handToString(pile));
     while(i<2){
-      from_client[i] = server_handshake( to_client,i, handToString(hands[i]));
+      from_client[i] = server_handshake( to_client,i, handToString(hands[i]),response);
       i++;
     }
     i=0;
-    char * data=calloc(BUFFER_SIZE,sizeof(char));
+	char * data=calloc(BUFFER_SIZE,sizeof(char));
+	free(response);
     while(read(from_client[i],data,BUFFER_SIZE)){
-      printf("The player played %s",data);
-      fflush(stdout);
-      char * response=data;
-      write(to_client[i],response,strlen(response));
-      free(data);    
-      i++;
-      if(i==2){
-        i=0;
-      }
+	  response=calloc(sizeof(char),1000);	
+	  sprintf(response,"Discard Pile:\n%s\n",handToString(pile));
+	  write(to_client[i],response,strlen(response));
+	  free(response);
+	  if(indexOf(hands[i],data)>=0){
+		printf("The player played %s",data);
+		play(hands[i],indexOf(hands[i],data),pile);
+		fflush(stdout);
+		if(strcmp(data,"W")){
+			i++;
+		}
+		else{
+			response="Pick a color";
+			write(to_client[i],response,strlen(response));
+		}
+		free(data);
+		data=calloc(BUFFER_SIZE,sizeof(char)); 
+		if(i==2){
+			i=0;
+		}
+	  }
     }
   }
 }

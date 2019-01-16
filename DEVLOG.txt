@@ -1,3 +1,10 @@
+Mohammed Jamil -- 2018-01-16 1:00
+--------------------------------------------------------------
+Functions added for removing a card, drawing a card, checking if a card is in a players hand,
+comparing cards.
+Working on getting game to function
+==============================================================
+
 Mohammed Uddin -- 2018-01-11 12:20
 --------------------------------------------------------------
 The deck is now a linked list with the cards being stored on nodes

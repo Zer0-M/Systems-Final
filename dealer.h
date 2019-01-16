@@ -38,5 +38,15 @@ struct node * makeNode(struct node * prev, struct node * next, struct card * car
 struct node * shuffle(struct node * first);
 
 //void createNodeDeck(struct node * first);
+int cardcmp(struct node * card, char * info );
 
+int indexOf(struct node * deck,char * card);
+
+int length(struct node * first);
+
+struct node * createHand(struct node * first);
+
+void draw(struct node * first, struct node * hand);
+
+char * handToString(struct node * hand);
 struct node * createNodeDeck();
