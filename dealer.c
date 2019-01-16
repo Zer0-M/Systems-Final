@@ -128,23 +128,72 @@ struct node * shuffle(struct node * first){ //first should be white test card
 	new->prev = NULL;
 	new->next = NULL;
 	new->card = makeCard("white","test",0); //new shuffled deck
-	curr->prev = NULL;
-	first->next = curr->next; 
-	struct node * end = new; //tracks current end of new shuffled deck
+//	first->next = NULL; 
+//	curr->prev = NULL;
+//	first->next = curr->next; 
+	struct node * end = first; //tracks current end of new shuffled deck
+	struct node * begin = curr; //tracks beginning of old deck
 	for (int i = 107; i > 0; --i){
 		index = rand() % i;
-		for (int j = 0; j < index; ++j){ //navigate to index
+		for (int j; j < index; ++j){ //navigate to index
+			printf("%s %s\n",curr->card->name,curr->card->color);
 			curr = curr->next;
 		} 
-		struct node * temp = curr->next;
-		curr->prev->next = *temp; 
-		curr->next->prev = curr->prev; //detaches current
-		end->next = *curr;
-		curr->prev = *end; //attaches current to end of shuffled deck
-		curr = first->next;
+		if (index == 0){
+			printf("zero begin i %d dex %d\n",i,index);
+			begin = begin->next;
+			curr->next->prev = NULL;
+			curr->prev = end;
+			end->next = curr;
+			curr = NULL;
+			curr = begin;
+			printf("zero end i %d dex %d\n",i,index);
+		}
+		else if (index == i){
+			printf("back begin i %d dex %d\n",i,index);
+			curr->prev->next = NULL;
+			end->next = curr;
+			curr->prev = end;
+			curr->next = NULL;
+			curr = begin;
+			printf("back end i %d dex %d\n",i,index);
+		}
+		else{
+			struct node * temp = curr->next;
+			printf("offending line i %d dex %d %s %s %p\n",i,index,curr->card->color, curr->card->name, curr->prev);
+			curr->prev->next = temp; 
+			temp->prev = curr->prev; //detaches current
+			end->next = curr;
+			curr->prev = end; //attaches current to end of shuffled deck
+			curr->next = NULL;
+			curr = begin;
+			printf("offense line i %d dex %d\n",i,index);
+		}
 	}
-	return new;
-}*/
+	return first;
+}
+*/
+
+struct node * shuffle(struct node * first){
+	struct node * * arr = calloc(sizeof(struct node *),110);
+	arr[0] = first;
+	srand(time(NULL));
+	struct node * curr = first->next;
+	while (curr){
+		int index = rand() % 108 + 1; //random index from 1 to 108
+		while (arr[index]){
+			index = rand() % 108 + 1; //repeat until empty area
+		}
+		arr[index] = curr;
+		curr = curr->next;	
+	}
+	for (int i = 1; i < 109; ++i){ //0 is white, 1 to 108 are random, 109 is NULL
+		arr[i]->next = arr[i+1];
+		arr[i]->prev = arr[i-1];
+	}
+	arr[0]->next = arr[1];
+	return first;
+}
 
 struct node * createNodeDeck(){
 	struct node * first = calloc(sizeof(struct node),1);
@@ -305,9 +354,11 @@ char * handToString(struct node * hand){
 		strcat(handstr,cardface);
 		temp=temp->next;
 	}
+	strcat(handstr, WHT);
 	return handstr;
 }
 
+/*
 int main() {
   struct node * deck = createNodeDeck();
   struct node * pile=malloc(sizeof(struct node));
@@ -358,16 +409,17 @@ int main() {
     }
   }
 }
+*/
 
-
-/*int main(){
+int main(){
 //	struct node * first = calloc(sizeof(struct node),1);
 //	struct node * curr;
 	struct node * first = createNodeDeck();
-	struct node * curr = first->next;
+	first = shuffle(first);
+	struct node * curr = first; //->next;
 	while (curr->next){
 	//	curr = curr->next;
 		printf("%s %s\n",curr->card->color,curr->card->name);
 		curr = curr->next;
 	}
-}*/
+}

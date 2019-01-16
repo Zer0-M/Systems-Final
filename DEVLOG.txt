@@ -5,6 +5,11 @@ comparing cards.
 Working on getting game to function
 ==============================================================
 
+Mohammed Uddin -- 2018-01-14 11:05 
+--------------------------------------------------------------
+The deck can now be shuffled
+==============================================================
+
 Mohammed Uddin -- 2018-01-11 12:20
 --------------------------------------------------------------
 The deck is now a linked list with the cards being stored on nodes
