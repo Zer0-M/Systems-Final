@@ -358,7 +358,7 @@ char * handToString(struct node * hand){
 	return handstr;
 }
 
-/*
+
 int main() {
   struct node * deck = createNodeDeck();
   struct node * pile=malloc(sizeof(struct node));
@@ -409,8 +409,8 @@ int main() {
     }
   }
 }
-*/
 
+/*
 int main(){
 //	struct node * first = calloc(sizeof(struct node),1);
 //	struct node * curr;
@@ -422,4 +422,4 @@ int main(){
 		printf("%s %s\n",curr->card->color,curr->card->name);
 		curr = curr->next;
 	}
-}
+}*/
