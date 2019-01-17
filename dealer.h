@@ -29,15 +29,12 @@ struct node {
 	struct card * card;
 };
 
-//void createDeck(struct card* deck);
-
 struct card * makeCard(char * color, char * name, int action);
 
 struct node * makeNode(struct node * prev, struct node * next, struct card * card);
 
 struct node * shuffle(struct node * first);
 
-//void createNodeDeck(struct node * first);
 int cardcmp(struct node * card, char * info );
 
 int indexOf(struct node * deck,char * card);
@@ -49,4 +46,5 @@ struct node * createHand(struct node * first);
 void draw(struct node * first, struct node * hand);
 
 char * handToString(struct node * hand);
+
 struct node * createNodeDeck();
