@@ -371,17 +371,20 @@ int main()
 		while (i < 2)
 		{
 			from_client[i] = server_connect(socket,handToString(hands[i])); //server_handshake(to_client, i,handToString(hands[i]),response);
+			write(from_client[i], response, strlen(response));
 			i++;
 		}
 		i = 0;
 		char *data = calloc(BUFFER_SIZE, sizeof(char));
+		printf("%ld\n",read(from_client[i], data, BUFFER_SIZE));
 		while (read(from_client[i], data, BUFFER_SIZE))
-		{
+		{	
+			printf("%d\n",i);
 			char *hand = handToString(hands[i % 2]);
 			if (indexOf(hands[i % 2], data) >= 0 && cardcmp(pile, data, 0))
 			{
-				response = "Hello"; //calloc(sizeof(char), 1000);
-				sprintf(response, "Discard Pile:\n%s\nHand:\n%s", handToString(pile), hand);
+				response = calloc(sizeof(char), 1000);
+				sprintf(response, "Wait For Your Turn\nHand:\n%s", hand);
 				write(from_client[i], response, strlen(response));
 				free(response);
 				printf("The player played %s\n", data);

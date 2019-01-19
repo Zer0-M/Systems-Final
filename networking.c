@@ -105,6 +105,6 @@ int client_setup(char * server) {
 
   free(hints);
   freeaddrinfo(results);
-
+  
   return sd;
 }
