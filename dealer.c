@@ -60,9 +60,8 @@ struct node *play(struct node *deck, int index, struct node *pile)
 		{
 			deck = deck->next;
 		}
-		struct node *temp = malloc(sizeof(struct node *));
-		temp->card = makeCard(deck->next->card->color, deck->next->card->name, 0);
-		pile = temp;
+		pile = deck->next;
+		pile->next=NULL;
 		deck->next = deck->next->next;
 	}
 	return first;
@@ -407,14 +406,24 @@ int main()
 	while (1)
 	{
 		char *response = calloc(sizeof(char), 1000);
-		sprintf(response, "\nDiscard Pile:\n%s\n", pileToString(pile));
 		while (i < 2)
 		{
+			response = calloc(sizeof(char), 1000);
+			if(i!=0){
+				sprintf(response, "\nDiscard Pile:\n%s\n[Player %d]", pileToString(pile),i+1);
+			}
+			else{
+				sprintf(response, "\nDiscard Pile:\n%s\n[Player %d]", pileToString(pile),i+1);
+			}
+
 			from_client[i] = server_connect(socket,handToString(hands[i]),response); //server_handshake(to_client, i,handToString(hands[i]),response);
 			printf("%d\n",i);
+			free(response);
+
 			i++;
 		}
 		i = 0;
+		
 		char *data = calloc(BUFFER_SIZE, sizeof(char));
 		while (read(from_client[i], data, BUFFER_SIZE))
 		{	
@@ -422,23 +431,34 @@ int main()
 			char *hand = handToString(hands[i % 2]);
 			response = calloc(sizeof(char), 1000);
 			printf("data: %s card:%s %s Result %d\n",data,pile->card->color,pile->card->name,cardcmp(pile, data, 0));
-			if (indexOf(hands[i % 2], data) != 0 && !cardcmp(pile, data, 0))
+			if (indexOf(hands[i % 2], data) >= 0 && !cardcmp(pile, data, 0))
 			{
 				hands[i % 2] = play(hands[i % 2], indexOf(hands[i % 2], data), pile);
 				hand = handToString(hands[i % 2]);
-				sprintf(response, "Wait For Your Turn\n");
+				sprintf(response, "\nDiscard Pile:\n%s\nWait for Your Turn\n", pileToString(pile));
+				write(from_client[i],response,strlen(response));
 				printf("The player played %s\n", data);
 				fflush(stdout);
 				data = calloc(BUFFER_SIZE, sizeof(char));
 				i++;
+				if(i==2){
+					i=0;
+				}
 			}
-			else if(!(indexOf(hands[i % 2], data))){
+			else if(!strcmp(data,"draw")){
+				draw(deck,hands[i % 2]);
+				write(from_client[i],handToString(hands[i % 2]),strlen(handToString(hands[i % 2])));
+				i++;
+				if(i==2){
+					i=0;
+				}
+			}
+			else if(indexOf(hands[i % 2], data)<0){
 				strcat(response,"Card not in hand\n Choose Again:");
 			}
 			else{
 				strcat(response,"Card does not match pile\n Choose Again:");
 			}
-			write(from_client[i],response,strlen(response));
 			free(response);
 		}
 	}
