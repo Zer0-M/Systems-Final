@@ -28,4 +28,10 @@ Be the first play to run out of cards
 - If a card cannot be chosen, the player must draw
 - The first player to run out of cards wins
 
+## Unemplemented Features
+- Calling "Uno" when a player has one card left
+- Action cards (draw 2 cards, skip turn, reverse turns)
+
 ## Bugs
+- Weird characters after player
+- Played cards pile (discard pile) is printed multiple times
