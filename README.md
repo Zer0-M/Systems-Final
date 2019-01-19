@@ -1,5 +1,6 @@
 # Uno: Mediocre Edition
 Final Project for Systems Level Programming
+Mohammed Jamil and Mohammed Uddin
 
 ##Description
 Recreate a version of the popular card game UNO using what we have learned in class.
