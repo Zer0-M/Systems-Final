@@ -38,7 +38,7 @@ struct node * makeNode(struct node * prev, struct node * next, struct card * car
 struct node * shuffle(struct node * first);
 
 //void createNodeDeck(struct node * first);
-int cardcmp(struct node * card, char * info );
+int cardcmp(struct node * card, char * info,int exact );
 
 int indexOf(struct node * deck,char * card);
 
