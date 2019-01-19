@@ -9,9 +9,8 @@ struct card * makeCard(char * color, char * name, int action){
 	return temp;
 }
 
-struct node *makeNode(struct node *prev, struct node *next, struct card *card)
-{
-	struct node *temp = calloc(sizeof(struct node), 1);
+struct node * makeNode(struct node * prev, struct node * next, struct card * card){
+	struct node * temp = calloc(sizeof(struct node),1);
 	temp->prev = prev;
 	temp->next = next;
 	prev->next = temp;
@@ -95,24 +94,21 @@ int cardcmp(struct node *card, char *info, int exact)
 
 struct node *shuffle(struct node *first)
 {
-	struct node **arr = calloc(sizeof(struct node *), 110);
+	struct node * * arr = calloc(sizeof(struct node *),110);
 	arr[0] = first;
 	srand(time(NULL));
-	struct node *curr = first->next;
-	while (curr)
-	{
+	struct node * curr = first->next;
+	while (curr){
 		int index = rand() % 108 + 1; //random index from 1 to 108
-		while (arr[index])
-		{
+		while (arr[index]){
 			index = rand() % 108 + 1; //repeat until empty area
 		}
 		arr[index] = curr;
 		curr = curr->next;
 	}
-	for (int i = 1; i < 109; ++i)
-	{ //0 is white, 1 to 108 are random, 109 is NULL
-		arr[i]->next = arr[i + 1];
-		arr[i]->prev = arr[i - 1];
+	for (int i = 1; i < 109; ++i){ //0 is white, 1 to 108 are random, 109 is NULL
+		arr[i]->next = arr[i+1];
+		arr[i]->prev = arr[i-1];
 	}
 	arr[0]->next = arr[1];
 	return first;
@@ -120,7 +116,7 @@ struct node *shuffle(struct node *first)
 
 struct node *createNodeDeck()
 {
-	struct node *first = calloc(sizeof(struct node), 1);
+	struct node * first = calloc(sizeof(struct node),1);
 	first->prev = NULL;
 	first->next = NULL;
 	first->card = makeCard("white","test",0);
@@ -143,61 +139,62 @@ struct node *createNodeDeck()
 			temp->next = NULL;
 			curr->next = temp;
 			temp->card = makeCard(colors[i], "R", 1);
-			curr = temp;
+          	curr = temp;
 			cardnum++;
-
+          	
 			temp = calloc(sizeof(struct node),1);
 			temp->prev = curr;
 			temp->next = NULL;
 			curr->next = temp;
 			temp->card = makeCard(colors[i], "+2", 1);
 			curr = temp;
-			cardnum++;
+          	cardnum++;
 
-			temp = calloc(sizeof(struct node), 1);
+			temp = calloc(sizeof(struct node),1);
 			temp->prev = curr;
 			temp->next = NULL;
 			curr->next = temp;
 			temp->card = makeCard(colors[i], "X", 1);
 			curr = temp;
-			cardnum++;
-		}
+          	cardnum++;
+        }
+    }
+    for(int i=0;i<4;i++){
+		temp = calloc(sizeof(struct node),1);
+		temp->prev = curr;
+		temp->next = NULL;
 		curr->next = temp;
 		temp->card = makeCard("", "W", 1);
 		curr = temp;
-		cardnum++;
+        cardnum++;
 
-		temp = calloc(sizeof(struct node), 1);
+		temp = calloc(sizeof(struct node),1);
 		temp->prev = curr;
 		temp->next = NULL;
 		curr->next = temp;
 		temp->card = makeCard("", "W4", 1);
 		curr = temp;
-		cardnum++;
-	}
+        cardnum++;
+    }
 	return first;
 }
-struct node *createHand(struct node *first)
-{
-	struct node *curr;
-	if (strcmp(first->card->color, "white"))
-	{
+struct node * createHand(struct node * first){
+	struct node * curr;
+	if(strcmp(first->card->color,"white")){
 		curr = first->next;
 	}
-	else
-	{
-		curr = first;
+	else{
+		curr =first;
 	}
-	for (int i = 0; i < 7; i++)
-	{
-		curr = curr->next;
+	for(int i=0;i<7;i++){
+		curr=curr->next;
 	}
-	struct node *temp = malloc(sizeof(struct node *));
-	temp->card = makeCard(curr->card->color, curr->card->name, 0);
-	temp->next = curr->next;
-	curr->next = NULL;
-	curr = first->next;
-	*first = *temp;
+	struct node * temp= malloc(sizeof(struct node *));
+	temp->card=makeCard(curr->card->color,curr->card->name,0);
+	temp->next=curr->next;
+	curr->next=NULL;
+	curr=first->next;
+	*first=*temp;
 	return curr;
 }
 void draw(struct node *first, struct node *hand)
@@ -331,7 +328,7 @@ char *handToString(struct node *hand)
 
 int main()
 {
-	/*struct node *deck = createNodeDeck();
+	struct node *deck = createNodeDeck();
 	struct node *pile = malloc(sizeof(struct node));
 	deck=shuffle(deck);
 	*pile = *deck->next;
@@ -341,7 +338,7 @@ int main()
 	for (int i = 0; i < 13; i++)
 	{
 		hands[i] = createHand(deck);
-	}*/
+	}
 	//signal(SIGINT,sighandler);
 	int socket=0;
 	socket=server_setup();
@@ -351,7 +348,7 @@ int main()
 	while (1)
 	{
 		char *response = calloc(sizeof(char), 1000);
-		/*sprintf(response, "\nDiscard Pile:\n%s\n", handToString(pile));*/
+		sprintf(response, "\nDiscard Pile:\n%s\n", handToString(pile));
 		while (i < 2)
 		{
 			from_client[i] = server_connect(socket);//server_handshake(to_client, i,handToString(hands[i]),response);
@@ -361,22 +358,20 @@ int main()
 		char *data = calloc(BUFFER_SIZE, sizeof(char));
 		while (read(from_client[i], data, BUFFER_SIZE))
 		{
-			/*char * hand=handToString(hands[i%2]);
+			char * hand=handToString(hands[i%2]);
 			if (indexOf(hands[i%2], data) >= 0 && cardcmp(pile,data,0))
-			{*/
+			{
 				response = "Hello";//calloc(sizeof(char), 1000);
-				//sprintf(response, "Discard Pile:\n%s\nHand:\n%s", handToString(pile),hand);
+				sprintf(response, "Discard Pile:\n%s\nHand:\n%s", handToString(pile),hand);
 				write(from_client[i], response, strlen(response));
 				free(response);
 				printf("The player played %s\n", data);
-				/*
 				printf("%d\n",indexOf(hands[i%2], data));
 				hands[i%2]=play(hands[i%2], indexOf(hands[i%2], data), pile);
 				hand=handToString(hands[i%2]);
-				*/
 				fflush(stdout);
 				data = calloc(BUFFER_SIZE, sizeof(char));
-			//}
+			}
 			i++;
 		}
 	}
