@@ -383,7 +383,7 @@ char *handToString(struct node *hand)
 	return handstr;
 }
 
-int main()
+int main(int argc, char * argv[])
 {
 	struct node *deck = createNodeDeck();
 	struct node *pile = malloc(sizeof(struct node));
@@ -391,21 +391,31 @@ int main()
 	pile=deck->next;
 	deck=deck->next->next;
 	pile->next=NULL;
-	struct node **hands = calloc(sizeof(struct node *), 2);
-	for (int i = 0; i < 13; i++)
+
+	int players = 2;
+	if (argc > 1){
+		if (!strcmp(argv[1],"3")){
+			players = 3;
+		}
+		if (!strcmp(argv[1],"4")){
+			players = 4;
+		}
+	}
+	struct node **hands = calloc(sizeof(struct node *), players);
+	for (int i = 0; i < players; i++)
 	{
 		hands[i] = createHand(deck);
 	}
 	//signal(SIGINT,sighandler);
 	int socket = 0;
 	socket = server_setup();
-	int to_client[2];
-	int from_client[2];
+	int to_client[players];
+	int from_client[players];
 	int i = 0;
 	while (1)
 	{
 		char *response = calloc(sizeof(char), 1000);
-		while (i < 2)
+		while (i < players)
 		{
 			response = calloc(sizeof(char), 1000);
 			if(i!=0){
@@ -438,17 +448,17 @@ int main()
 			char *hand = handToString(hands[i % 2]);
 			response = calloc(sizeof(char), 1000);
 			printf("data: %s card:%s %s Result %d\n",data,pile->card->color,pile->card->name,cardcmp(pile, data, 0));
-			if (indexOf(hands[i % 2], data) >= 0 && !cardcmp(pile, data, 0))
+			if (indexOf(hands[i % players], data) >= 0 && !cardcmp(pile, data, 0))
 			{
-				hands[i % 2] = play(hands[i % 2], indexOf(hands[i % 2], data), pile);
-				hand = handToString(hands[i % 2]);
-				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait\n",handToString(hands[i%2]), pileToString(pile));
+				hands[i % players] = play(hands[i % players], indexOf(hands[i % players], data), pile);
+				hand = handToString(hands[i % players]);
+				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait\n",handToString(hands[i%players]), pileToString(pile));
 				write(from_client[i],response,strlen(response));
 				printf("The player played %s\n", data);
 				fflush(stdout);
 				data = calloc(BUFFER_SIZE, sizeof(char));
 				i++;
-				if(i==2){
+				if(i==players){
 					i=0;
 				}
 				response = calloc(sizeof(char), 1000);
@@ -456,17 +466,17 @@ int main()
 				write(from_client[i],response,strlen(response));
 			}
 			else if(!strcmp(data,"draw")){
-				draw(deck,hands[i % 2]);
-				write(from_client[i],handToString(hands[i % 2]),strlen(handToString(hands[i % 2])));
+				draw(deck,hands[i % players]);
+				write(from_client[i],handToString(hands[i % players]),strlen(handToString(hands[i % players])));
 				i++;
-				if(i==2){
+				if(i==players){
 					i=0;
 				}
 				response = calloc(sizeof(char), 1000);
 				sprintf(response, "Your Turn\nDiscard Pile:\n%s", pileToString(pile));
 				write(from_client[i],response,strlen(response));
 			}
-			else if(indexOf(hands[i % 2], data)<0){
+			else if(indexOf(hands[i % players], data)<0){
 				strcat(response,"Card not in hand\n Choose Again:");
 			}
 			else{

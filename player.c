@@ -19,7 +19,6 @@ int main(int argc, char **argv) {
     printf("%s\n",buff);
     char * data=calloc(BUFFER_SIZE,sizeof(char));
   	while(1){
-      printf("%s %s\n",data,strstr(data,"Your Turn"));
       if(strstr(data,"Your Turn")!=NULL){
         printf("If you have no matching cards type in draw\n");
         char * response=calloc(BUFFER_SIZE,sizeof(char));
