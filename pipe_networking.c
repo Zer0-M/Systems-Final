@@ -10,7 +10,7 @@
 
   returns the file descriptor for the upstream pipe.
   =========================*/
-int server_handshake(int *to_client,int playernum, char * hand,char * pile) {
+int server_handshake(int *to_client,int playernum, /*char * hand,*/char * pile) {
   int s2cp=mkfifo("/tmp/s2c",0644);
   if(s2cp==-1){
     printf("%s \n",strerror(errno));
@@ -30,9 +30,9 @@ int server_handshake(int *to_client,int playernum, char * hand,char * pile) {
   if(to_client[playernum]==-1){
     printf("%s \n",strerror(errno));
   }
-  printf("%s\n",hand);
-  strcat(hand,pile);
-  write(to_client[playernum],hand,strlen(hand));
+  //printf("%s\n",hand);
+  //strcat(hand,pile);
+  write(to_client[playernum],ACK,strlen(ACK));
   char response[HANDSHAKE_BUFFER_SIZE];
   read(upstream,response,HANDSHAKE_BUFFER_SIZE);
   //printf("Response received from client: %s\n",response);
