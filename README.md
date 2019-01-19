@@ -29,3 +29,4 @@ Be the first play to run out of cards
 ## Bugs
 - Weird characters after player
 - Played cards pile (discard pile) is printed multiple times
+- If input is not completely accurate the program malfunctions(card name input must be exact)
