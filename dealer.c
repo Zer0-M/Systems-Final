@@ -450,6 +450,10 @@ int main(int argc, char * argv[])
 			printf("data: %s card:%s %s Result %d\n",data,pile->card->color,pile->card->name,cardcmp(pile, data, 0));
 			if (indexOf(hands[i % players], data) >= 0 && !cardcmp(pile, data, 0))
 			{
+				if(length(hands[i % players])<2){
+					write(from_client[i],"You WIN",15);
+					exit(1);
+				}
 				hands[i % players] = play(hands[i % players], indexOf(hands[i % players], data), pile);
 				hand = handToString(hands[i % players]);
 				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait\n",handToString(hands[i%players]), pileToString(pile));
@@ -477,10 +481,10 @@ int main(int argc, char * argv[])
 				write(from_client[i],response,strlen(response));
 			}
 			else if(indexOf(hands[i % players], data)<0){
-				strcat(response,"Card not in hand\n Choose Again:");
+				strcat(response,"Card not in hand\n Your Turn Again:");
 			}
 			else{
-				strcat(response,"Card does not match pile\n Choose Again:");
+				strcat(response,"Card does not match pile\n Your Turn Again:");
 			}
 			free(response);
 		}
