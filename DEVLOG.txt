@@ -1,3 +1,11 @@
+Mohammed Jamil -- 2018-01-19 7:50
+--------------------------------------------------------------
+Fixed the ToString
+Fixed the Play function
+Added Socket functionality
+Made the game somewhat playable
+==============================================================
+
 Mohammed Jamil -- 2018-01-16 1:00
 --------------------------------------------------------------
 Functions added for removing a card, drawing a card, checking if a card is in a players hand,
