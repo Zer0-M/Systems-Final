@@ -1,13 +1,16 @@
 
-#include "pipe_networking.h"
+#include "networking.h"
 
 
-int main() {
+int main(int argc, char **argv) {
 
   	int to_server;
   	int from_server;
-
-  	from_server = client_handshake( &to_server );
+    if (argc == 2)
+      from_server = client_setup( argv[1]);
+    else
+      from_server = client_setup( TEST_IP );
+  	//from_server = //client_handshake( &to_server );
   	while(1){
     	char * response=calloc(BUFFER_SIZE,sizeof(char));
     	printf("Note: +2 - adds two cards to next players hand\nX- skip next players turn\nR- change direction of turns\nW - change color being played\nW4 - change color and add 4 cards to next players hand\n");

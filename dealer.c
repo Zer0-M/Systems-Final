@@ -1,5 +1,5 @@
-#include "pipe_networking.h"
 #include "dealer.h"
+#include "networking.h"
 
 struct card * makeCard(char * color, char * name, int action){
 	struct card * temp = calloc(sizeof(struct card),1);
@@ -343,6 +343,8 @@ int main()
 		hands[i] = createHand(deck);
 	}*/
 	//signal(SIGINT,sighandler);
+	int socket=0;
+	socket=server_setup();
 	int to_client[2];
 	int from_client[2];
 	int i = 0;
@@ -352,7 +354,7 @@ int main()
 		/*sprintf(response, "\nDiscard Pile:\n%s\n", handToString(pile));*/
 		while (i < 2)
 		{
-			from_client[i] = server_handshake(to_client, i,/*handToString(hands[i]),*/response);
+			from_client[i] = server_connect(socket);//server_handshake(to_client, i,handToString(hands[i]),response);
 			i++;
 		}
 		i = 0;
@@ -364,7 +366,7 @@ int main()
 			{*/
 				response = "Hello";//calloc(sizeof(char), 1000);
 				//sprintf(response, "Discard Pile:\n%s\nHand:\n%s", handToString(pile),hand);
-				write(to_client[i%2], response, strlen(response));
+				write(from_client[i], response, strlen(response));
 				free(response);
 				printf("The player played %s\n", data);
 				/*
