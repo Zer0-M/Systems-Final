@@ -59,7 +59,7 @@ int server_setup() {
   returns the socket descriptor for the new socket connected
   to the client.
   =========================*/
-int server_connect(int sd) {
+int server_connect(int sd, char * hand) {
   int client_socket;
   socklen_t sock_size;
   struct sockaddr_storage client_address;
@@ -67,7 +67,7 @@ int server_connect(int sd) {
   sock_size = sizeof(client_address);
   client_socket = accept(sd, (struct sockaddr *)&client_address, &sock_size);
   error_check(client_socket, "server accept");
-
+  write(client_socket,hand,strlen(hand));
   return client_socket;
 }
 

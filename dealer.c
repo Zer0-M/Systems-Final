@@ -370,7 +370,7 @@ int main()
 		sprintf(response, "\nDiscard Pile:\n%s\n", handToString(pile));
 		while (i < 2)
 		{
-			from_client[i] = server_connect(socket); //server_handshake(to_client, i,handToString(hands[i]),response);
+			from_client[i] = server_connect(socket,handToString(hands[i])); //server_handshake(to_client, i,handToString(hands[i]),response);
 			i++;
 		}
 		i = 0;

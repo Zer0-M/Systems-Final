@@ -18,7 +18,7 @@
 
 void error_check(int i, char *s);
 int server_setup();
-int server_connect(int sd);
+int server_connect(int sd,char * hand);
 int client_setup(char * server);
 
 
