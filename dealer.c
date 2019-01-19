@@ -422,10 +422,18 @@ int main()
 			i++;
 		}
 		i = 0;
+		for(int j=0;j<sizeof(from_client)/4;j++){
+			response = calloc(sizeof(char), 1000);
+			sprintf(response, "\nDiscard Pile:\n%s\n[Player %d]", pileToString(pile),j+1);
+			write(from_client[j],response,strlen(response));
+			free(response);
+		}
 		
 		char *data = calloc(BUFFER_SIZE, sizeof(char));
+		write(from_client[i],"Your Turn",1000);
 		while (read(from_client[i], data, BUFFER_SIZE))
 		{	
+			
 			printf("sd index: %d\n",i);
 			char *hand = handToString(hands[i % 2]);
 			response = calloc(sizeof(char), 1000);
@@ -434,7 +442,7 @@ int main()
 			{
 				hands[i % 2] = play(hands[i % 2], indexOf(hands[i % 2], data), pile);
 				hand = handToString(hands[i % 2]);
-				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait for Your Turn\n",handToString(hands[i%2]), pileToString(pile));
+				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait\n",handToString(hands[i%2]), pileToString(pile));
 				write(from_client[i],response,strlen(response));
 				printf("The player played %s\n", data);
 				fflush(stdout);
@@ -443,6 +451,9 @@ int main()
 				if(i==2){
 					i=0;
 				}
+				response = calloc(sizeof(char), 1000);
+				sprintf(response, "Your Turn\nDiscard Pile:\n%s", pileToString(pile));
+				write(from_client[i],response,strlen(response));
 			}
 			else if(!strcmp(data,"draw")){
 				draw(deck,hands[i % 2]);
@@ -451,6 +462,9 @@ int main()
 				if(i==2){
 					i=0;
 				}
+				response = calloc(sizeof(char), 1000);
+				sprintf(response, "Your Turn\nDiscard Pile:\n%s", pileToString(pile));
+				write(from_client[i],response,strlen(response));
 			}
 			else if(indexOf(hands[i % 2], data)<0){
 				strcat(response,"Card not in hand\n Choose Again:");
