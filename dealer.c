@@ -60,7 +60,7 @@ struct node *play(struct node *deck, int index, struct node *pile)
 		{
 			deck = deck->next;
 		}
-		pile = deck->next;
+		*pile = *deck->next;
 		pile->next=NULL;
 		deck->next = deck->next->next;
 	}
@@ -396,7 +396,6 @@ int main()
 	{
 		hands[i] = createHand(deck);
 	}
-	printf("%s %s\n",pile->card->color,pile->card->name);
 	//signal(SIGINT,sighandler);
 	int socket = 0;
 	socket = server_setup();
@@ -435,7 +434,7 @@ int main()
 			{
 				hands[i % 2] = play(hands[i % 2], indexOf(hands[i % 2], data), pile);
 				hand = handToString(hands[i % 2]);
-				sprintf(response, "\nDiscard Pile:\n%s\nWait for Your Turn\n", pileToString(pile));
+				sprintf(response, "Hand:\n%s\nDiscard Pile:\n%s\nWait for Your Turn\n",handToString(hands[i%2]), pileToString(pile));
 				write(from_client[i],response,strlen(response));
 				printf("The player played %s\n", data);
 				fflush(stdout);
