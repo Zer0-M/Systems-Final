@@ -4,13 +4,7 @@ Final Project for Systems Level Programming
 Mohammed Jamil and Mohammed Uddin
 
 ## Description
-Recreate a version of the popular card game UNO using what we have learned in class.
-Rules:
-- Every player is a dealt a hand of 7 cards
-- Each player views his/her cards(by color or number) during their turn and tries to match the card in the Discard Pile.
-- The first player to run out of cards wins
-- If a player has one card left, they must call uno or else someone else may call uno and make the player with one card left draw two more cards
-
+This is a recreation of the game Uno.
 
 ## Instructions to start
 1. Clone the repository and navigate to the cloned repository. 
